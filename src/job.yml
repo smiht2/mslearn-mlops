@@ -1,15 +1,15 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
-code: model
-command: >-
-  python 
-  --
-  --
+display_name: diabetes-training-yml
 inputs:
-  training_data: 
-    type: uri_folder 
-    path: 
-  reg_rate: 0.01
-environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
-compute: 
-experiment_name: 
-description: 
+  data:
+    path: ../experimentation/data/
+    type: uri_folder
+  learning_rate: 0.25
+  registered_model_name: diabetes-data-train-job-yml
+  test_train_ratio: 0.2
+code: ./model/
+command: python train.py --training_data ${{inputs.data}} --reg_rate ${{inputs.learning_rate}} --registered_model_name ${{inputs.registered_model_name}}
+environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu:36 
+compute: azureml:mslearn-mlops01
+experiment_name: "azure_job_for_diabetes_training_job_yaml"
+description: "Read the daiabetes csv file, train a logistic regression model from it using sklearn."
