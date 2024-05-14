@@ -22,7 +22,7 @@ def main(args):
     df = get_csvs_df(args.training_data)
 
     # split data
-    X_train, X_test, y_train, y_test = split_data(df)
+    X_train, X_test, y_train, y_test = split_data(df,ratio=args.train_test_ratio)
 
     # train model
     model = train_model(args.reg_rate, X_train,y_train)
@@ -69,9 +69,9 @@ def get_csvs_df(path):
 
 
 # TO DO: add function to split data
-def split_data(df):
+def split_data(df, ratio):
     X, y = df[['Pregnancies','PlasmaGlucose','DiastolicBloodPressure','TricepsThickness','SerumInsulin','BMI','DiabetesPedigree','Age']].values, df['Diabetic'].values    
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=ratio, random_state=0)
     return X_train,X_test,y_train, y_test
 def train_model(reg_rate, X_train,  y_train):
     # train model
@@ -96,6 +96,8 @@ def parse_args():
                         type=float, default=0.01)
     parser.add_argument("--registered_model_name", dest='registered_model_name',
                         type=str, default="default-model")
+    parser.add_argument("--train_test_ratio", dest='train_test_ratio',
+                        type=float, default=0.20)
 
     # parse args
     args = parser.parse_args()
@@ -111,8 +113,7 @@ if __name__ == "__main__":
 
     # parse args
     args = parse_args()
-    # args.training_data = "/home/azureuser/cloudfiles/code/Users/smibrahimhossain/mslearn-mlops/experimentation/data/"
-    # args.registered_model_name = "mslearn-mlops-reg"
+    
     # run main function
     main(args)
 
