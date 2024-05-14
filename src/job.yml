@@ -10,6 +10,6 @@ inputs:
 code: ./model/
 command: python train.py --training_data ${{inputs.data}} --reg_rate ${{inputs.learning_rate}} --registered_model_name ${{inputs.registered_model_name}}
 environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu:36 
-compute: azureml:mslearn-mlops01
+compute: azureml:CompCluster01
 experiment_name: "azure_job_for_diabetes_training_job_yaml"
 description: "Read the daiabetes csv file, train a logistic regression model from it using sklearn."
