@@ -1,0 +1,17 @@
+name: Code checks
+
+on:
+  pull_request:
+
+jobs:
+  job1:
+    name: linting
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Placeholder
+      run: |
+        echo "Will add code checks here in next challenge"
+
+
