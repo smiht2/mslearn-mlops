@@ -30,6 +30,7 @@ def main(args):
 
     # test model
     result = test_model(model, X_test, y_test)
+    print(result)
     # register and save the model
     reg_save_model(
         model, reg=True, save=False, registered_model_name=args.registered_model_name
@@ -123,6 +124,7 @@ def parse_args():
     parser.add_argument("--reg_rate", dest="reg_rate", type=float, default=0.01)
     parser.add_argument(
         "--registered_model_name",
+        
         dest="registered_model_name",
         type=str,
         default="default-model",
