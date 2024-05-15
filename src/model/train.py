@@ -11,6 +11,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 
+
 # define functions
 def main(args):
     # TO DO: enable autologging
@@ -22,22 +23,26 @@ def main(args):
     df = get_csvs_df(args.training_data)
 
     # split data
-    X_train, X_test, y_train, y_test = split_data(df,ratio=args.train_test_ratio)
+    X_train, X_test, y_train, y_test = split_data(df, ratio=args.train_test_ratio)
 
     # train model
-    model = train_model(args.reg_rate, X_train,y_train)
+    model = train_model(args.reg_rate, X_train, y_train)
 
     # test model
-    result = test_model(model,X_test,y_test)
+    result = test_model(model, X_test, y_test)
     # register and save the model
-    reg_save_model(model,reg=True, save=False,registered_model_name = args.registered_model_name)
-    
+    reg_save_model(
+        model, reg=True, save=False, registered_model_name=args.registered_model_name
+    )
+
     # stop logging
     mlflow.end_run()
-def reg_save_model(model, reg=False,save=False,registered_model_name = "no_name"):
+
+
+def reg_save_model(model, reg=False, save=False, registered_model_name="no_name"):
     # Registering the model to the workspace
     ##########################
-    #<save and register model>
+    # <save and register model>
     ##########################
     if reg:
         print("Registering the model via MLFlow")
@@ -54,8 +59,10 @@ def reg_save_model(model, reg=False,save=False,registered_model_name = "no_name"
             path=os.path.join(registered_model_name, "trained_model"),
         )
     ###########################
-    #</save and register model>
+    # </save and register model>
     ###########################
+
+
 def get_csvs_df(path):
     # path = '/home/azureuser/cloudfiles/code/Users/smibrahimhossain/mslearn-mlops/experimentation/data/'
     if not os.path.exists(path):
@@ -70,40 +77,66 @@ def get_csvs_df(path):
 
 # TO DO: add function to split data
 def split_data(df, ratio):
-    X, y = df[['Pregnancies','PlasmaGlucose','DiastolicBloodPressure','TricepsThickness','SerumInsulin','BMI','DiabetesPedigree','Age']].values, df['Diabetic'].values    
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=ratio, random_state=0)
-    return X_train,X_test,y_train, y_test
-def train_model(reg_rate, X_train,  y_train):
+    X, y = (
+        df[
+            [
+                "Pregnancies",
+                "PlasmaGlucose",
+                "DiastolicBloodPressure",
+                "TricepsThickness",
+                "SerumInsulin",
+                "BMI",
+                "DiabetesPedigree",
+                "Age",
+            ]
+        ].values,
+        df["Diabetic"].values,
+    )
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=ratio, random_state=0
+    )
+    return X_train, X_test, y_train, y_test
+
+
+def train_model(reg_rate, X_train, y_train):
     # train model
-    model = LogisticRegression(C=1/reg_rate, solver="liblinear").fit(X_train, y_train)
+    model = LogisticRegression(C=1 / reg_rate, solver="liblinear").fit(X_train, y_train)
     return model
-def test_model(model,X_test,y_test):
+
+
+def test_model(model, X_test, y_test):
     y_hat = model.predict(X_test)
     acc = np.average(y_hat == y_test)
 
     y_scores = model.predict_proba(X_test)
-    auc = roc_auc_score(y_test,y_scores[:,1])
+    auc = roc_auc_score(y_test, y_scores[:, 1])
 
-    return acc,auc
+    return acc, auc
+
+
 def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
 
     # add arguments
-    parser.add_argument("--training_data", dest='training_data',
-                        type=str)
-    parser.add_argument("--reg_rate", dest='reg_rate',
-                        type=float, default=0.01)
-    parser.add_argument("--registered_model_name", dest='registered_model_name',
-                        type=str, default="default-model")
-    parser.add_argument("--train_test_ratio", dest='train_test_ratio',
-                        type=float, default=0.20)
+    parser.add_argument("--training_data", dest="training_data", type=str)
+    parser.add_argument("--reg_rate", dest="reg_rate", type=float, default=0.01)
+    parser.add_argument(
+        "--registered_model_name",
+        dest="registered_model_name",
+        type=str,
+        default="default-model",
+    )
+    parser.add_argument(
+        "--train_test_ratio", dest="train_test_ratio", type=float, default=0.20
+    )
 
     # parse args
     args = parser.parse_args()
 
     # return args
     return args
+
 
 # run script
 if __name__ == "__main__":
@@ -113,7 +146,7 @@ if __name__ == "__main__":
 
     # parse args
     args = parse_args()
-    
+
     # run main function
     main(args)
 
