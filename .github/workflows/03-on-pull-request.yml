@@ -1,4 +1,4 @@
-name: On Pull req Code checks Automatically challenge-03
+name: Test On Pull req  challenge-03
 
 on:
   pull_request:
