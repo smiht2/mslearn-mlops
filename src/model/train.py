@@ -23,7 +23,8 @@ def main(args):
     df = get_csvs_df(args.training_data)
 
     # split data
-    X_train, X_test, y_train, y_test = split_data(df, ratio=args.train_test_ratio)
+    X_train, X_test, y_train, y_test = split_data(df, 
+                                                  ratio = args.train_test_ratio)
 
     # train model
     model = train_model(args.reg_rate, X_train, y_train)
@@ -33,14 +34,16 @@ def main(args):
     print(result)
     # register and save the model
     reg_save_model(
-        model, reg=True, save=False, registered_model_name=args.registered_model_name
+        model, reg=True, save=False, 
+        registered_model_name=args.registered_model_name
     )
 
     # stop logging
     mlflow.end_run()
 
 
-def reg_save_model(model, reg=False, save=False, registered_model_name="no_name"):
+def reg_save_model(model, reg=False, save=False,
+                    registered_model_name = "no_name"):
     # Registering the model to the workspace
     ##########################
     # <save and register model>
@@ -101,7 +104,8 @@ def split_data(df, ratio):
 
 def train_model(reg_rate, X_train, y_train):
     # train model
-    model = LogisticRegression(C=1 / reg_rate, solver="liblinear").fit(X_train, y_train)
+    model = LogisticRegression(C=1 / reg_rate, 
+                               solver="liblinear").fit(X_train, y_train)
     return model
 
 
@@ -121,10 +125,13 @@ def parse_args():
 
     # add arguments
     parser.add_argument("--training_data", dest="training_data", type=str)
-    parser.add_argument("--reg_rate", dest="reg_rate", type=float, default=0.01)
+    parser.add_argument("--reg_rate",
+                        dest="reg_rate",
+                        type=float,
+                        default=0.01)
     parser.add_argument(
         "--registered_model_name",
-        
+
         dest="registered_model_name",
         type=str,
         default="default-model",
@@ -132,13 +139,10 @@ def parse_args():
     parser.add_argument(
         "--train_test_ratio", dest="train_test_ratio", type=float, default=0.20
     )
-
     # parse args
     args = parser.parse_args()
-
     # return args
-    return args
-
+    return 
 
 # run script
 if __name__ == "__main__":
