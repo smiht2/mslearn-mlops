@@ -72,7 +72,6 @@ def reg_save_model(
 
 
 def get_csvs_df(path):
-    # path = '/home/azureuser/cloudfiles/code/Users/smibrahimhossain/mslearn-mlops/experimentation/data/'
     if not os.path.exists(path):
         raise RuntimeError(f"Cannot use non-existent path provided: {path}")
     csv_files = glob.glob(f"{path}/*.csv")
