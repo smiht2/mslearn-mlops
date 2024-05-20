@@ -1,0 +1,20 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+display_name: diabetes-training-prod
+inputs:
+  data:
+    path: ../production/data/
+    type: uri_folder
+  learning_rate: 0.25
+  registered_model_name: diabetes-train-prod
+  train_test_ratio: 0.2
+code: ./model/
+command: | 
+python train.py 
+--training_data ${{inputs.data}} 
+--reg_rate ${{inputs.learning_rate}} 
+--registered_model_name ${{inputs.registered_model_name}}
+--train_test_ratio ${{inputs.train_test_ratio}}
+environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu:36 
+compute: azureml:CompCluster01
+experiment_name: "prod_diabetes_training"
+description: "Read the daiabetes csv from prodcution file, train a logistic regression model from it using sklearn."

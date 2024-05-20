@@ -6,9 +6,9 @@ inputs:
     type: uri_folder
   learning_rate: 0.25
   registered_model_name: diabetes-data-train-job-yml
-  test_train_ratio: 0.2
+  train_test_ratio: 0.2
 code: ./model/
-command: python train.py --training_data ${{inputs.data}} --reg_rate ${{inputs.learning_rate}} --registered_model_name ${{inputs.registered_model_name}}
+command: python train.py --training_data ${{inputs.data}}  --reg_rate ${{inputs.learning_rate}} --registered_model_name ${{inputs.registered_model_name}} --train_test_ratio ${{inputs.train_test_ratio}}
 environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu:36 
 compute: azureml:CompCluster01
 experiment_name: "azure_job_for_diabetes_training_job_yaml"
